@@ -16,10 +16,11 @@ class FCM
 
   attr_accessor :timeout, :api_key, :json_key_path, :project_base_uri
 
-  def initialize(api_key, json_key_path = "", project_name = "", client_options = {})
+  def initialize(api_key, json_key_path = "", json_key_json = {}, project_name = "", client_options = {})
     @api_key = api_key
     @client_options = client_options
-    @json_key_path = json_key_path
+    @json_key = json_key_path
+    @json_key_json = json_key_json
     @project_base_uri = BASE_URI_V1 + project_name.to_s
   end
 
@@ -329,10 +330,14 @@ class FCM
   end
 
   def json_key
-    @json_key ||= if @json_key_path.respond_to?(:read)
-                    @json_key_path
-                  else
-                    File.open(@json_key_path)
-                  end
+    unless @json_key_json.nil?
+      @json_key = @json_key_json
+    else
+      @json_key ||= if @json_key_path.respond_to?(:read)
+                      @json_key_path
+                    else
+                      File.open(@json_key_path)
+                    end
+    end
   end
 end
