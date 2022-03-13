@@ -331,7 +331,7 @@ class FCM
 
   def json_key
     unless @json_key_json.nil?
-      @json_key = @json_key_json
+      @json_key = StringIO.new(@json_key_json)
     else
       @json_key ||= if @json_key_path.respond_to?(:read)
                       @json_key_path
